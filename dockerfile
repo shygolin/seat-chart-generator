@@ -1,8 +1,8 @@
-# 使用 Python 3.9 輕量版
+# 使用官方 Python 3.9 輕量映像檔
 FROM python:3.9-slim
 
-# 安裝 XeLaTeX 及其所需的中文字體與組件
-# 這會讓環境支援執行 'xelatex' 指令
+# 安裝 XeLaTeX 引擎與中文字包
+# fonts-noto-cjk 是 Linux 上最穩定的中文字體
 RUN apt-get update && apt-get install -y \
     xelatex \
     texlive-xetex \
@@ -10,18 +10,21 @@ RUN apt-get update && apt-get install -y \
     fonts-noto-cjk \
     && rm -rf /var/lib/apt/lists/*
 
+# 更新字體快取
+RUN fc-cache -fv
+
 # 設定工作目錄
 WORKDIR /app
 
-# 複製所有檔案到容器中
+# 複製程式碼與依賴檔
 COPY . .
 
-# 安裝 Python 依賴（包含 Gunicorn）
+# 安裝 Python 套件
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 設定環境變數與連接埠
+# Railway 預設 PORT 為 8080
 ENV PORT=8080
 EXPOSE 8080
 
-# 使用 Gunicorn 啟動伺服器
+# 啟動伺服器
 CMD ["gunicorn", "server:app", "--bind", "0.0.0.0:8080"]
