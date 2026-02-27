@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>座位表生成器</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>座位表生成器</h1>
+            <div class="toolbar">
+                <label class="btn btn-upload">
+                    <input type="file" id="excelInput" accept=".xlsx,.xls" style="display: none;">
+                    <span>📁 上傳 Excel</span>
+                </label>
+                <button class="btn btn-save" id="saveBtn">💾 儲存</button>
+                <button class="btn btn-load" id="loadBtn">📂 載入</button>
+                <button class="btn btn-reset" id="resetBtn">🔄 重置</button>
+                <button class="btn btn-export-pdf" id="exportPdfBtn">📄 匯出 PDF</button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="status-bar" id="statusBar">
+                <span id="statusText">請上傳 Excel 座位表文件</span>
+            </div>
+
+            <div class="seating-chart-container" id="seatingChartContainer">
+                <div class="seating-chart" id="seatingChart">
+                    <!-- 座位表将在这里生成 -->
+                </div>
+                <div class="podium">
+                    <span>講台</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入外部库 -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
