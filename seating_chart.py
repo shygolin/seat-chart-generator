@@ -53,18 +53,22 @@ def generate_latex(excel_file, txt_file, output_pdf):
 
 
 def generate_latex_from_data(seating_layout, students, output_pdf):
-    """使用 LaTeX 生成 PDF（直接从数据）"""
-    print("使用 LaTeX 生成 PDF（推荐方案）...")
+    """使用 LaTeX 生成 PDF（直接從數據）"""
+    print("使用 LaTeX 生成 PDF（推薦方案）...")
     
-    # 生成 LaTeX 源码
+    # 修改這部分的 LaTeX 標頭
     latex_content = r"""\documentclass[12pt,a4paper]{article}
-\usepackage{ctex}  % 支持中文
+\usepackage[UTF8, fontset=none]{ctex}  % 禁用預設字型設定
 \usepackage{geometry}
 \usepackage{array}
 \usepackage{colortbl}
 \usepackage{xcolor}
+\usepackage{xeCJK}
 
-% 设置页面边距
+% 設定 Linux 伺服器上存在的字型 (Dockerfile 中安裝的 fonts-noto-cjk)
+\setCJKmainfont{Noto Sans CJK TC}
+
+% 設置頁面邊距
 \geometry{left=1.5cm,right=1.5cm,top=2cm,bottom=2cm}
 
 % 自定义颜色
