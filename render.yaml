@@ -1,0 +1,16 @@
+services:
+  # Web Service
+  - type: web
+    name: seating-chart-app
+    env: python
+    plan: free
+    region: singapore
+    buildCommand: pip install -r requirements.txt
+    startCommand: python backend.py
+    envVars:
+      - key: PORT
+        value: 8000
+    disk:
+      name: data
+      mountPath: /app/data
+      sizeGB: 1
