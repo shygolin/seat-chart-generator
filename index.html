@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>座位表生成系统</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 用户模式切换按钮（隐蔽） -->
+    <button class="user-mode-toggle admin-mode" id="userModeToggle" onclick="toggleUserMode()" title="切换用户模式">
+        🔧 管理员
+    </button>
+
+    <div class="container">
+        <h1>📊 座位表生成系统</h1>
+
+        <div class="mode-switch-container" style="display: none;">
+            <button class="mode-btn" id="modeToggleBtn" onclick="toggleAcademicMode()">🎓 學藝模式：關閉</button>
+        </div>
+
+        <div class="mode-info" id="modeInfo"></div>
+
+        <!-- 右鍵菜單 -->
+        <div id="contextMenu" class="context-menu" style="display: none; position: fixed; z-index: 10000;">
+            <div class="context-menu-item" onclick="toggleAcademicMode()">
+                <span class="menu-icon">🎓</span>
+                <span id="menuAcademicModeText">切換學藝模式</span>
+            </div>
+            <div class="context-menu-divider"></div>
+            <div class="context-menu-item" onclick="saveCurrentConfig()">
+                <span class="menu-icon">💾</span>
+                <span>保存配置</span>
+            </div>
+            <div class="context-menu-item" onclick="loadSavedConfig()">
+                <span class="menu-icon">📂</span>
+                <span>載入配置</span>
+            </div>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="loading-spinner"></div>
+            <p>正在載入教室配置...</p>
+        </div>
+
+        <div class="error-message" id="errorMessage"></div>
+
+        <div class="random-sort-section admin-only" id="randomSortSection" style="display: none;">
+            <div class="random-sort-header">
+                <h2>🎲 隨機排序產生器</h2>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 300px; gap: 20px; align-items: start;">
+                <!-- 学生列表输入 -->
+                <div class="random-input-container">
+                    <textarea id="studentListInput" placeholder="輸入學生姓名，每行一個&#10;例如：&#10;張三&#10;李四&#10;王五"></textarea>
+                </div>
+                
+                <!-- 控制面板 -->
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <!-- 随机化按钮 -->
+                    <div style="background: #f0f4ff; padding: 20px; border-radius: 10px; text-align: center;">
+                        <button class="btn-primary" onclick="randomizeStudentList()" style="width: 100%;">
+                            🎲 隨機化
+                        </button>
+                        <p style="margin-top: 10px; font-size: 0.85em; color: #666;">
+                            點擊後會隨機打亂學生姓名順序
+                        </p>
+                    </div>
+                    
+                    <!-- 起始位置控制 -->
+                    <div style="background: #f0f4ff; padding: 20px; border-radius: 10px;">
+                        <h3 style="margin-bottom: 15px; color: #333; font-size: 1.1em; text-align: center;">
+                            📍 起始位置
+                        </h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9em;">起始列 (0-11)</label>
+                                <input type="number" id="startCol" min="0" max="11" value="0"
+                                       style="width: 100%; padding: 8px; border: 2px solid #667eea; border-radius: 5px; font-size: 1em;">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9em;">起始行 (0-6)</label>
+                                <input type="number" id="startRow" min="0" max="6" value="0"
+                                       style="width: 100%; padding: 8px; border: 2px solid #667eea; border-radius: 5px; font-size: 1em;">
+                            </div>
+                        </div>
+                        <button class="btn-primary" onclick="fillFromPosition()" style="width: 100%;">
+                            📍 從指定位置填充
+                        </button>
+                        <p style="margin-top: 10px; font-size: 0.85em; color: #666; text-align: center;">
+                            按列優先填充：向下填完一列，再向右移到下一列
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="preview-section" id="previewSection" style="display: none;">
+            <div class="preview-header">
+                <h2>👀 座位表預覽（學生視角）</h2>
+                <div class="header-buttons">
+                    <button class="btn-info" onclick="toggleFullscreen()" id="fullscreenBtn" style="min-width: 150px;">🖥️ 全螢幕</button>
+                    <button class="btn-success user-only" onclick="generatePDF()" style="min-width: 150px;">📥 下載 PDF</button>
+                </div>
+            </div>
+
+            <div class="seating-grid" id="seatingGrid"></div>
+
+            <div class="podium">🎤 講台</div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+
+    </body>
+
+    </html>
